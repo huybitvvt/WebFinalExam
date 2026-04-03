@@ -1,0 +1,32 @@
+* {
+    margin: 0; padding: 0; box-sizing: border-box;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    list-style: none; text-decoration: none;
+}
+:root {
+    --primary: rgb(0, 110, 255);
+    --bg-main: rgb(15, 23, 42); 
+    --bg-card: rgb(255, 255, 255);
+    --bg-panel: rgb(240, 244, 248);
+    --text-dark: rgb(30, 41, 59);
+    --text-light: rgb(240, 244, 248);
+    --text-muted: rgb(100, 116, 139);
+    --border: rgb(226, 232, 240);
+    --glow: rgba(0, 110, 255, 0.5);
+    --danger: rgb(239, 68, 68);
+    --success: rgb(34, 197, 94);
+}
+html { scroll-behavior: smooth; }
+body {
+    background:
+        radial-gradient(circle at top right, rgba(56, 189, 248, 0.12), transparent 28%),
+        linear-gradient(180deg, rgb(15, 23, 42), rgb(2, 6, 23));
+    color: var(--text-light);
+    display: flex;
+    min-height: 100vh;
+    overflow-x: hidden;
+    line-height: 1.5;
+}
+.hide-menu { display: none !important; }
+input[type=number]::-webkit-inner-spin-button, 
+input[type=number]::-webkit-outer-spin-button { -webkit-appearance: none; margin: 0; }

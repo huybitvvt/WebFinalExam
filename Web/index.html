@@ -1,0 +1,929 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GUNSTORE - Trung tâm Điều hành</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="base.css">
+    <link rel="stylesheet" href="layout.css">
+    <link rel="stylesheet" href="components.css">
+    <link rel="stylesheet" href="store-home.css">
+    <link rel="stylesheet" href="admin-features.css">
+    <link rel="stylesheet" href="admin-reports.css">
+    <link rel="stylesheet" href="admin-views.css">
+    <link rel="stylesheet" href="admin-crud.css">
+    <link rel="stylesheet" href="admin-customers.css">
+    <link rel="stylesheet" href="admin-staff.css">
+</head>
+
+<body>
+    <nav class="sidebar">
+        <div class="user-profile-box">
+            <div class="avatar-pill user-avatar-char">A</div>
+            <div class="user-info">
+                <h4 class="user-display-name">Xin chào, ...</h4>
+                <span class="user-role-label">Đang tải...</span>
+            </div>
+        </div>
+
+        <div class="nav-group admin-only hide-menu">
+            <div class="nav-title">Quản lý</div>
+            <a href="javascript:void(0)" class="nav-item active" onclick="switchMenu(this, 'view-home')"><i
+                    class="fa-solid fa-house"></i> Trang chủ</a>
+            <a href="javascript:void(0)" class="nav-item"
+                onclick="switchMenu(this, 'view-admin-products', 'renderAdminProductTable')"><i
+                    class="fa-solid fa-box"></i> Sản phẩm</a>
+            <a href="javascript:void(0)" class="nav-item"
+                onclick="switchMenu(this, 'view-admin-customers', 'renderAdminCustomers')"><i
+                    class="fa-solid fa-users"></i> Khách hàng</a>
+            <a href="javascript:void(0)" class="nav-item"
+                onclick="switchMenu(this, 'view-admin-staff', 'renderAdminStaff')"><i class="fa-solid fa-user-tie"></i>
+                Nhân viên</a>
+            <a href="javascript:void(0)" class="nav-item"
+                onclick="switchMenu(this, 'view-admin-suppliers', 'renderAdminSuppliers')"><i
+                    class="fa-solid fa-truck"></i> Nhà cung cấp</a>
+            <a href="javascript:void(0)" class="nav-item"
+                onclick="switchMenu(this, 'view-admin-promotions', 'renderAdminPromotions')"><i
+                    class="fa-solid fa-tags"></i> Khuyến mãi</a>
+        </div>
+
+        <div class="nav-group admin-only hide-menu">
+            <div class="nav-title">Báo cáo</div>
+            <a href="javascript:void(0)" class="nav-item"
+                onclick="switchMenu(this, 'view-admin-transactions', 'renderAdminTransactionsReport')"><i
+                    class="fa-solid fa-file-invoice-dollar"></i> Hoá đơn giao dịch</a>
+            <a href="javascript:void(0)" class="nav-item"
+                onclick="switchMenu(this, 'view-admin-revenue', 'renderAdminRevenueReport')"><i
+                    class="fa-solid fa-chart-line"></i> Thống kê Doanh thu</a>
+        </div>
+
+        <div class="nav-group customer-only hide-menu">
+            <div class="nav-title">Bán hàng</div>
+            <a href="javascript:void(0)" class="nav-item active" onclick="switchMenu(this, 'view-home')"><i
+                    class="fa-solid fa-crosshairs"></i> Kho vũ khí</a>
+            <a href="javascript:void(0)" class="nav-item" onclick="openCart()"><i class="fa-solid fa-cart-shopping"></i>
+                Giỏ hàng của tôi <span class="nav-item-badge" id="cartNavCount">0</span></a>
+            <a href="javascript:void(0)" class="nav-item"
+                onclick="switchMenu(this, 'view-order-history', 'renderOrderHistory')"><i
+                    class="fa-solid fa-list-check"></i> Lịch sử mua hàng <span class="nav-item-badge secondary"
+                    id="orderPendingCount">0</span></a>
+            <a href="javascript:void(0)" class="nav-item" onclick="openInbox()"><i class="fa-solid fa-envelope"></i> Hòm
+                thư <span class="nav-item-badge hide-menu" id="inboxNavCount"
+                    style="background: rgb(239, 68, 68); color: white;">0</span></a>
+        </div>
+
+        <div class="nav-group">
+            <div class="nav-title">Hệ thống</div>
+            <a href="javascript:void(0)" class="nav-item"
+                onclick="switchMenu(this, 'view-personal-info', 'renderPersonalInfo')"><i
+                    class="fa-solid fa-user-gear"></i> Thông tin cá nhân</a>
+            <a href="javascript:void(0)" class="nav-item" style="color: rgb(239, 68, 68);" onclick="logout()"><i
+                    class="fa-solid fa-right-from-bracket"></i> Đăng xuất</a>
+        </div>
+    </nav>
+
+    <main class="main-content">
+
+        <div id="view-home" class="view-section">
+            <div class="customer-home">
+                <div class="shop-announcement-bar">
+                    <span><i class="fa-solid fa-shield-halved"></i> Hỗ trợ tận tâm 24/7</span>
+                    <span><i class="fa-solid fa-truck-fast"></i> Giao nhanh toàn quốc</span>
+                    <span><i class="fa-solid fa-fire-flame-curved"></i> Hàng hot cập nhật liên tục</span>
+                    <span><i class="fa-solid fa-headset"></i> Zalo / Facebook phản hồi nhanh</span>
+                </div>
+
+                <div class="top-hero-banner storefront-hero-banner" style="margin-bottom: 24px;">
+                    <div class="storefront-hero-copy">
+                        <span class="storefront-hero-badge">GIỚI THIỆU PROJECT</span>
+                        <h1>Website mô phỏng cửa hàng thiết bị chiến thuật</h1>
+                        <p>Bài tập lớn môn Cơ sở lập trình web với luồng khách hàng, giỏ hàng, hóa đơn, khuyến mãi và khu quản trị trên cùng một giao diện.</p>
+                        <div class="storefront-hero-tags">
+                            <span>HTML/CSS/JS thuần</span>
+                        </div>
+                    </div>
+                    <div class="storefront-hero-stats">
+                        <article class="storefront-stat-card">
+                            <strong>25+</strong>
+                            <span>Mặt hàng mẫu để trình bày danh mục.</span>
+                        </article>
+                        <article class="storefront-stat-card">
+                            <strong>2 vai trò</strong>
+                            <span>Khách hàng và admin với luồng riêng.</span>
+                        </article>
+                        <article class="storefront-stat-card wide">
+                            <strong>Logic hệ thống</strong>
+                            <span>Giá bán, voucher, đơn hàng và báo cáo </span>
+                        </article>
+                    </div>
+                </div>
+
+                <div class="tactical-divider" style="opacity: 0.5;"></div>
+
+                <div class="hero-grid" style="margin-bottom: 10px;">
+                    <article class="hero-left hero-panel hero-panel-main">
+                        <div class="hero-panel-content">
+                            <span class="hero-panel-badge">TRƯNG BÀY CHÍNH</span>
+                            <h3>Không gian sản phẩm nổi bật</h3>
+                            <p>Ảnh, giá bán và thông tin mặt hàng đầy đủ</p>
+                            <div class="hero-panel-tags">
+                                <span>Ảnh local</span>
+                                <span>Thông tin chi tiết</span>
+                            </div>
+                        </div>
+                    </article>
+                    <div class="hero-right">
+                        <article class="video-wrapper hero-panel hero-panel-armor">
+                            <div class="hero-panel-content compact">
+                                <span class="hero-panel-badge">NHÓM PHÒNG VỆ</span>
+                                <h3>Bảo hộ rõ ràng</h3>
+                                <p>Áo giáp và kính bảo hộ,...</p>
+                            </div>
+                        </article>
+                        <article class="video-wrapper hero-panel hero-panel-accessory">
+                            <div class="hero-panel-content compact">
+                                <span class="hero-panel-badge">NHÓM PHỤ KIỆN</span>
+                                <h3>Phụ kiện dễ so sánh</h3>
+                                <p>Ống ngắm, đèn pin và phụ kiện rail...</p>
+                            </div>
+                        </article>
+                    </div>
+                </div>
+
+                <div class="tactical-divider" style="opacity: 0.5;"></div>
+
+                <div class="shop-kpi-grid customer-only">
+                    <article class="shop-kpi-card">
+                        <small>danh mục</small>
+                        <strong id="storeTotalCatalogCount">0</strong>
+                        <span>Sản phẩm đang mở bán trong giao diện mua hàng hiện tại.</span>
+                    </article>
+                    <article class="shop-kpi-card">
+                        <small>ưu đãi</small>
+                        <strong id="storeHotDealCount">0</strong>
+                        <span>Mẫu đang có ưu đãi để đẩy chốt đơn nhanh.</span>
+                    </article>
+                    <article class="shop-kpi-card">
+                        <small>giỏ hàng</small>
+                        <strong id="storeCartCount">0</strong>
+                        <span>Số món bạn đã ghim để gửi yêu cầu mua hàng.</span>
+                    </article>
+                    <article class="shop-kpi-card">
+                        <small>đơn chờ</small>
+                        <strong id="storePendingOrderCount">0</strong>
+                        <span>Yêu cầu mua hàng đang chờ admin xác nhận.</span>
+                    </article>
+                </div>
+
+                <div class="shop-promo-strip customer-only" id="storePromoStrip"></div>
+
+                <div class="shop-category-grid">
+                    <button class="shop-category-card" onclick="focusStoreCategory('sungngan')">
+                        <i class="fa-solid fa-location-crosshairs"></i>
+                        <strong>Súng ngắn</strong>
+                        <span>Dòng pistol dễ tiếp cận</span>
+                    </button>
+                    <button class="shop-category-card" onclick="focusStoreCategory('sungtruong')">
+                        <i class="fa-solid fa-crosshairs"></i>
+                        <strong>Súng trường</strong>
+                        <span>Dòng súng trường và carbine phổ biến</span>
+                    </button>
+                    <button class="shop-category-card" onclick="focusStoreCategory('shotgun')">
+                        <i class="fa-solid fa-bullseye"></i>
+                        <strong>Shotgun</strong>
+                        <span>Lên đạn bơm và bán tự động</span>
+                    </button>
+                    <button class="shop-category-card" onclick="focusStoreCategory('smg')">
+                        <i class="fa-solid fa-bolt"></i>
+                        <strong>SMG</strong>
+                        <span>Thiết kế gọn, tốc độ cao</span>
+                    </button>
+                    <button class="shop-category-card" onclick="focusStoreCategory('hangnang')">
+                        <i class="fa-solid fa-rocket"></i>
+                        <strong>Hạng nặng</strong>
+                        <span>Pháo, súng máy, hỏa lực</span>
+                    </button>
+                    <button class="shop-category-card" onclick="focusStoreCategory('danduoc')">
+                        <i class="fa-solid fa-box-open"></i>
+                        <strong>Đạn dược</strong>
+                        <span>Đạn, vỏ shell và gói tiếp đạn</span>
+                    </button>
+                    <button class="shop-category-card" onclick="focusStoreCategory('phongve')">
+                        <i class="fa-solid fa-shield"></i>
+                        <strong>Đồ tự vệ</strong>
+                        <span>Kính, găng tay, áo giáp</span>
+                    </button>
+                    <button class="shop-category-card" onclick="focusStoreCategory('phukien')">
+                        <i class="fa-solid fa-screwdriver-wrench"></i>
+                        <strong>Phụ kiện</strong>
+                        <span>Đèn, ống ngắm và phụ kiện gắn ngoài</span>
+                    </button>
+                </div>
+
+                <div class="tactical-divider" style="opacity: 0.5;"></div>
+
+                <div class="shop-benefit-grid">
+                    <div class="shop-benefit-card">
+                        <i class="fa-solid fa-handshake-angle"></i>
+                        <div>
+                            <strong>Tận tâm</strong>
+                            <span>Giải đáp nhanh, bám sát nhu cầu người mua</span>
+                        </div>
+                    </div>
+                    <div class="shop-benefit-card">
+                        <i class="fa-solid fa-shield-halved"></i>
+                        <div>
+                            <strong>Uy tín</strong>
+                            <span>Sản phẩm rõ dòng chơi và cơ chế hoạt động</span>
+                        </div>
+                    </div>
+                    <div class="shop-benefit-card">
+                        <i class="fa-solid fa-gem"></i>
+                        <div>
+                            <strong>Chất lượng</strong>
+                            <span>Ưu tiên mặt hàng nổi bật và dễ chốt đơn</span>
+                        </div>
+                    </div>
+                    <div class="shop-benefit-card">
+                        <i class="fa-solid fa-comments"></i>
+                        <div>
+                            <strong>Kênh hỗ trợ</strong>
+                            <span>Zalo, Facebook và hotline được đẩy nổi bật</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="tactical-divider" style="opacity: 0.5;"></div>
+
+                <div class="shop-section-head">
+                    <div>
+                        <h2 class="shop-section-title">Sản phẩm nổi bật</h2>
+                    </div>
+                    <a href="javascript:void(0)" class="shop-inline-link" onclick="focusStoreCategory('all')">Xem toàn
+                        bộ</a>
+                </div>
+                <div class="top-selling-grid store-grid"></div>
+
+                <div class="tactical-divider" style="opacity: 0.5;"></div>
+
+                <div id="storeProductCatalog" class="shop-catalog-panel">
+                    <div class="shop-catalog-toolbar">
+                        <div>
+                            <p class="shop-eyebrow">cửa hàng</p>
+                            <h2 class="shop-section-title">Khám phá toàn bộ sản phẩm</h2>
+                            <span class="shop-result-note" id="storeCatalogResultCount">Đang hiển thị 0 sản phẩm trong
+                                nhóm tất cả danh mục.</span>
+                        </div>
+
+                        <div class="shop-catalog-controls" style="flex: 1; justify-content: flex-end;">
+                            <div class="custom-category-dropdown" id="customCategoryDropdown">
+                                <div class="dropdown-trigger" onclick="toggleDropdown()">
+                                    <span id="dropdownSelectedText">Tất cả danh mục</span>
+                                    <i class="fa-solid fa-chevron-down"></i>
+                                </div>
+                                <ul class="dropdown-menu" id="dropdownMenu">
+                                    <li onclick="selectCategory('all', 'Tất cả danh mục')">Tất cả danh mục</li>
+
+                                    <li class="has-submenu">
+                                        <div class="menu-item-content"
+                                            onclick="selectCategory('sungngan', 'Súng ngắn')">
+                                            Súng ngắn <i class="fa-solid fa-caret-right"></i>
+                                        </div>
+                                        <ul class="submenu">
+                                            <li onclick="selectCategory('sungngan-xoay', 'Súng ngắn ổ xoay', event)">
+                                                Súng ngắn ổ xoay</li>
+                                            <li
+                                                onclick="selectCategory('sungngan-banauto', 'Súng ngắn bán tự động', event)">
+                                                Súng ngắn bán tự động</li>
+                                            <li onclick="selectCategory('sungngan-auto', 'Súng ngắn tự động', event)">
+                                                Súng ngắn tự động</li>
+                                            <li onclick="selectCategory('sungngan-magnum', 'Súng ngắn Magnum', event)">
+                                                Súng ngắn Magnum</li>
+                                        </ul>
+                                    </li>
+
+                                    <li class="has-submenu">
+                                        <div class="menu-item-content"
+                                            onclick="selectCategory('sungtruong', 'Súng trường')">
+                                            Súng trường <i class="fa-solid fa-caret-right"></i>
+                                        </div>
+                                        <ul class="submenu">
+                                            <li
+                                                onclick="selectCategory('sungtruong-banauto', 'Súng trường bán tự động', event)">
+                                                Bán tự động</li>
+                                            <li
+                                                onclick="selectCategory('sungtruong-auto', 'Súng trường tự động', event)">
+                                                Tự động</li>
+                                            <li onclick="selectCategory('sungbantia', 'Súng bắn tỉa', event)">Súng bắn
+                                                tỉa</li>
+                                        </ul>
+                                    </li>
+
+                                    <li onclick="selectCategory('shotgun', 'Súng Shotgun')">Súng Shotgun</li>
+
+                                    <li class="has-submenu">
+                                        <div class="menu-item-content"
+                                            onclick="selectCategory('smg', 'Súng tiểu liên')">
+                                            Súng tiểu liên <i class="fa-solid fa-caret-right"></i>
+                                        </div>
+                                        <ul class="submenu">
+                                            <li onclick="selectCategory('smg-banauto', 'Tiểu liên bán tự động', event)">
+                                                Bán tự động</li>
+                                            <li onclick="selectCategory('smg-auto', 'Tiểu liên tự động', event)">Tự động
+                                            </li>
+                                        </ul>
+                                    </li>
+
+                                    <li class="has-submenu">
+                                        <div class="menu-item-content"
+                                            onclick="selectCategory('hangnang', 'Vũ khí hạng nặng')">
+                                            Hạng nặng <i class="fa-solid fa-caret-right"></i>
+                                        </div>
+                                        <ul class="submenu">
+                                            <li onclick="selectCategory('sungmay-nhe', 'Súng máy hạng nhẹ', event)">Súng
+                                                máy hạng nhẹ</li>
+                                            <li onclick="selectCategory('sungmay-trung', 'Súng máy hạng trung', event)">
+                                                Súng máy hạng trung</li>
+                                            <li onclick="selectCategory('sungmay-nang', 'Súng máy hạng nặng', event)">
+                                                Súng máy hạng nặng</li>
+                                            <li
+                                                onclick="selectCategory('sungmay-danang', 'Súng máy đa chức năng', event)">
+                                                Đa chức năng</li>
+                                            <li onclick="selectCategory('phunlua', 'Súng phun lửa', event)">Súng phun
+                                                lửa</li>
+                                            <li onclick="selectCategory('khonggiat', 'Súng không giật', event)">Súng
+                                                không giật</li>
+                                            <li
+                                                onclick="selectCategory('phongtenlua', 'Hệ thống phóng tên lửa', event)">
+                                                Hệ thống phóng tên lửa</li>
+                                            <li onclick="selectCategory('phongluu', 'Súng phóng lựu', event)">Súng phóng
+                                                lựu</li>
+                                            <li onclick="selectCategory('phao', 'Pháo', event)">Pháo</li>
+                                        </ul>
+                                    </li>
+
+                                    <li onclick="selectCategory('danduoc', 'Đạn dược')">Đạn dược</li>
+                                    <li onclick="selectCategory('phongve', 'Đồ tự vệ')">Đồ tự vệ</li>
+                                    <li onclick="selectCategory('phukien', 'Phụ kiện')">Phụ kiện</li>
+                                </ul>
+                            </div>
+
+                            <div class="search-box shop-search-box">
+                                <i class="fa-solid fa-magnifying-glass"></i>
+                                <input type="text" id="storeSearchInput"
+                                    placeholder="Tìm kiếm sản phẩm, cơ chế hoặc phụ kiện..."
+                                    name="store-search"
+                                    autocomplete="off"
+                                    autocapitalize="off"
+                                    autocorrect="off"
+                                    spellcheck="false"
+                                    oninput="searchProducts(this.value)">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="product-grid display-products"></div>
+                </div>
+
+                <div class="tactical-divider" style="opacity: 0.5;"></div>
+
+                <div class="shop-trust-panels">
+                    <div class="shop-trust-card">
+                        <small>vận chuyển</small>
+                        <strong>Đối tác giao hàng linh hoạt</strong>
+                        <span>Thiết kế block thông tin giống kiểu shop bán hàng chuyên nghiệp: rõ, ngắn và dễ
+                            quét.</span>
+                    </div>
+                    <div class="shop-trust-card">
+                        <small>thanh toán</small>
+                        <strong>Chốt đơn nhanh</strong>
+                        <span>Kết hợp chuyển khoản, COD và tư vấn trước khi xác nhận đơn để tăng cảm giác mua hàng
+                            thật.</span>
+                    </div>
+                    <div class="shop-trust-card">
+                        <small>kết nối</small>
+                        <strong>Social & community</strong>
+                        <span>Đặt vị trí cho Zalo, Facebook và nhóm support như cách DN GEAR làm ở cuối trang
+                            chủ.</span>
+                    </div>
+                </div>
+
+                <div class="tactical-divider" style="opacity: 0.5;"></div>
+
+                <div class="admin-home admin-only hide-menu">
+                    <div class="shop-section-head">
+                        <div>
+                            <p class="shop-eyebrow">admin insight</p>
+                            <h2 class="shop-section-title">Bảng điều khiển nhanh</h2>
+                        </div>
+                        <span class="shop-inline-note">Giữ số liệu vận hành ngay trong giao diện mua hàng mới.</span>
+                    </div>
+
+                    <div class="dashboard-cards">
+                        <div class="stat-card blue">
+                            <h3>Tổng sản phẩm</h3>
+                            <p id="admin-total-guns">0</p><span>Mặt hàng đang quản lý</span>
+                        </div>
+                        <div class="stat-card green">
+                            <h3>YÊU CẦU CHỜ DUYỆT</h3>
+                            <p id="admin-pending-orders">0</p><span>Đơn hàng cần xử lý</span>
+                        </div>
+                        <div class="stat-card red">
+                            <h3>CẢNH BÁO CẠN KHO</h3>
+                            <p id="admin-low-stock">0</p><span>Sản phẩm tồn kho dưới 5</span>
+                        </div>
+                        <div class="stat-card orange">
+                            <h3>TỔNG VỐN LƯU KHO</h3>
+                            <p id="admin-inventory-value">0$</p><span>Giá trị hàng hóa hiện tại</span>
+                        </div>
+                    </div>
+
+                    <div class="tactical-divider" style="opacity: 0.5;"></div>
+
+                    <div class="trade-in-banner">
+                        <div class="trade-in-content" style="text-align: center;">
+                            <h2 class="trade-in-title">TRẠM TÁI CHẾ VÀ THU MUA LẠI</h2>
+                            <p class="trade-in-description">
+                                Đừng vội vứt bỏ những món đồ đã từng sát cánh cùng bạn! Chúng tôi nhận định giá và thu
+                                mua súng cũ, vỏ đạn cùng phụ kiện tactical với mức chi trả cực kỳ hấp dẫn. Thanh lý đồ
+                                cũ, gom ngân sách lên đời siêu phẩm mới ngay hôm nay!
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="view-order-history" class="hide-menu">
+            <div class="order-history-shell">
+                <div class="shop-section-head">
+                    <div>
+                        <p class="shop-eyebrow">khach hang</p>
+                        <h2 class="shop-section-title">Lịch sử mua hàng</h2>
+                    </div>
+                    <a href="javascript:void(0)" class="shop-inline-link" onclick="openStoreCatalogFromHistory()">Tiếp
+                        tục mua sắm</a>
+                </div>
+
+                <div class="order-history-summary-grid">
+                    <div class="stat-card blue">
+                        <h3>Tổng yêu cầu</h3>
+                        <p id="orderHistoryTotalCount">0</p>
+                        <span>Tất cả đơn đã gửi từ cửa hàng.</span>
+                    </div>
+                    <div class="stat-card green">
+                        <h3>Đã hoàn tất</h3>
+                        <p id="orderHistoryDoneCount">0</p>
+                        <span>Đơn đã được admin xác nhận thành công.</span>
+                    </div>
+                    <div class="stat-card orange">
+                        <h3>Chờ duyệt</h3>
+                        <p id="orderHistoryPendingCount">0</p>
+                        <span>Yêu cầu đang chờ phản hồi từ hệ thống.</span>
+                    </div>
+                    <div class="stat-card red">
+                        <h3>Tổng chi tiêu</h3>
+                        <p id="orderHistorySpentValue">0$</p>
+                        <span>Giá trị đã hoàn tất ghi nhận cho tài khoản.</span>
+                    </div>
+                </div>
+
+                <div class="order-history-list" id="orderHistoryList"></div>
+            </div>
+        </div>
+
+        <div id="view-admin-products" class="hide-menu">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px;">
+                <h2 class="section-title" style="margin-bottom: 0;">QUẢN LÝ KHO SẢN PHẨM</h2>
+
+                <div class="search-box" style="width: 350px;">
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                    <input type="text" id="adminSearchInput" placeholder="Nhập tên hoặc Mã SP để lọc..."
+                        oninput="searchAdminTable(this.value)">
+                </div>
+
+                <button class="tactical-btn" style="width: auto; padding: 10px 20px; background: rgb(34, 197, 94);"
+                    onclick="openAddProductForm()">
+                    <i class="fa-solid fa-plus"></i> THÊM SẢN PHẨM MỚI
+                </button>
+            </div>
+
+            <div class="admin-table-container">
+                <table class="tactical-table">
+                    <thead>
+                        <tr>
+                            <th>Hình ảnh</th>
+                            <th>Mã SP</th>
+                            <th>Tên Sản Phẩm</th>
+                            <th>Đơn Giá</th>
+                            <th>Số Hàng</th>
+                            <th>Thao Tác</th>
+                        </tr>
+                    </thead>
+                    <tbody id="adminTableBody">
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div id="view-admin-customers" class="hide-menu">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px;">
+                <h2 class="section-title" style="color: rgb(245, 158, 11); margin-bottom: 0;">TOP KHÁCH HÀNG QUYỀN LỰC
+                    (VIP)</h2>
+
+                <div class="vip-threshold-container">
+                    <label>Hạn mức VIP ($):</label>
+                    <input type="number" id="vipThresholdInput" placeholder="Ví dụ: 10000">
+                    <button onclick="updateVipThreshold()">LƯU</button>
+                </div>
+            </div>
+
+            <div class="top-spenders-grid" id="vip-customers-grid">
+            </div>
+
+            <div class="tactical-divider" style="margin: 25px 0; opacity: 0.5;"></div>
+
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px;">
+                <h2 class="section-title" style="margin-bottom: 0;">HỒ SƠ KHÁCH HÀNG</h2>
+                <div class="search-box" style="width: 350px;">
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                    <input type="text" id="adminCustomerSearchInput" placeholder="Nhập tên hoặc Email để tra cứu..."
+                        oninput="searchAdminCustomers(this.value)">
+                </div>
+            </div>
+
+            <div class="admin-table-container">
+                <table class="tactical-table">
+                    <thead>
+                        <tr>
+                            <th>Avatar</th>
+                            <th>Tên Khách Hàng</th>
+                            <th>Liên Hệ (Email)</th>
+                            <th>Tổng Giải Ngân</th>
+                            <th>Trạng Thái</th>
+                            <th>Quản Trị</th>
+                        </tr>
+                    </thead>
+                    <tbody id="customerTableBody">
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div id="view-admin-staff" class="hide-menu">
+            <h2 class="section-title">QUẢN LÝ NHÂN SỰ</h2>
+
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px;">
+                <div class="search-box" style="width: 400px;">
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                    <input type="text" id="adminStaffSearchInput"
+                        placeholder="Tìm theo họ tên, số điện thoại hoặc email..."
+                        oninput="searchAdminStaff(this.value)">
+                </div>
+
+                <button class="tactical-btn" style="width: auto; padding: 10px 20px; background: rgb(0, 110, 255);"
+                    onclick="openAddStaffForm()">
+                    <i class="fa-solid fa-user-plus"></i> THÊM MỚI
+                </button>
+            </div>
+
+            <div class="admin-table-container">
+                <table class="tactical-table">
+                    <thead>
+                        <tr>
+                            <th>Mã</th>
+                            <th>Họ tên</th>
+                            <th>Giới tính</th>
+                            <th>Số điện thoại</th>
+                            <th>Email</th>
+                            <th>Chức vụ</th>
+                            <th>Lương</th>
+                            <th>Thao tác</th>
+                        </tr>
+                    </thead>
+                    <tbody id="staffTableBody">
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div id="view-admin-suppliers" class="hide-menu">
+            <h2 class="section-title">QUẢN LÝ ĐỐI TÁC CUNG CẤP</h2>
+
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px;">
+                <div class="search-box" style="width: 400px;">
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                    <input type="text" id="adminSupplierSearchInput"
+                        placeholder="Tìm tên tổ chức, liên hệ hoặc số điện thoại..."
+                        oninput="searchAdminSuppliers(this.value)">
+                </div>
+
+                <button class="tactical-btn" style="width: auto; padding: 10px 20px; background: rgb(0, 110, 255);"
+                    onclick="openAddSupplierForm()">
+                    <i class="fa-solid fa-plus"></i> THÊM NHÀ CUNG CẤP
+                </button>
+            </div>
+
+            <div class="admin-table-container">
+                <table class="tactical-table">
+                    <thead>
+                        <tr>
+                            <th>Mã NCC</th>
+                            <th>Tên Tổ Chức</th>
+                            <th>Người Liên Hệ</th>
+                            <th>Số Điện Thoại</th>
+                            <th>Email</th>
+                            <th>Trạng Thái</th>
+                            <th>Thao Tác</th>
+                        </tr>
+                    </thead>
+                    <tbody id="supplierTableBody">
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div id="view-admin-promotions" class="hide-menu">
+            <div class="promotion-toolbar">
+                <div>
+                    <h2 class="section-title" style="margin-bottom: 10px;">TRUNG TÂM KHUYẾN MÃI</h2>
+                    <p class="promotion-subtitle">Quản lý mã giảm giá đang áp dụng và theo dõi nhanh hiệu quả ưu đãi
+                        toàn hệ thống.</p>
+                </div>
+
+                <div class="promotion-toolbar-actions">
+                    <div class="search-box promotion-search-box">
+                        <i class="fa-solid fa-magnifying-glass"></i>
+                        <input type="text" id="adminPromotionSearchInput"
+                            placeholder="Tìm theo mã, tên chương trình hoặc điều kiện..."
+                            oninput="searchAdminPromotions(this.value)">
+                    </div>
+
+                    <button class="tactical-btn promotion-add-btn" onclick="openAddPromotionForm()">
+                        <i class="fa-solid fa-plus"></i> THÊM KHUYẾN MÃI
+                    </button>
+                </div>
+            </div>
+
+            <div class="promotion-summary-grid">
+                <div class="stat-card blue">
+                    <h3>Mã đang chạy</h3>
+                    <p id="promotionActiveCount">0</p>
+                    <span>Chương trình đang áp dụng cho khách hàng</span>
+                </div>
+                <div class="stat-card green">
+                    <h3>Tổng lượt dùng</h3>
+                    <p id="promotionUsageCount">0</p>
+                    <span>Số lượt dùng ghi nhận gần nhất</span>
+                </div>
+                <div class="stat-card orange">
+                    <h3>Ưu đãi cao nhất</h3>
+                    <p id="promotionBestValue">0%</p>
+                    <span>Mức giảm nổi bật đang có trên hệ thống</span>
+                </div>
+                <div class="stat-card red">
+                    <h3>Tạm dừng</h3>
+                    <p id="promotionPausedCount">0</p>
+                    <span>Mã đã lưu nhưng đang khóa áp dụng</span>
+                </div>
+            </div>
+
+            <div class="promotion-note-banner">
+                <div>
+                    <strong>Gợi ý vận hành:</strong> kết hợp banner bán chạy với mã giảm giá theo nhóm sản phẩm để tăng
+                    chuyển đổi trong giờ cao điểm.
+                </div>
+                <div class="promotion-note-metric">
+                    <span>Sản phẩm đang ở banner:</span>
+                    <strong id="promotionTopSellingCount">0</strong>
+                </div>
+            </div>
+
+            <div class="admin-table-container" style="min-height: 420px;">
+                <table class="tactical-table">
+                    <thead>
+                        <tr>
+                            <th>Mã KM</th>
+                            <th>Chương trình</th>
+                            <th>Mức ưu đãi</th>
+                            <th>Điều kiện áp dụng</th>
+                            <th>Lượt dùng</th>
+                            <th>Trạng thái</th>
+                            <th>Thao tác</th>
+                        </tr>
+                    </thead>
+                    <tbody id="promotionTableBody">
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div id="view-admin-transactions" class="hide-menu">
+            <div class="report-toolbar">
+                <div>
+                    <h2 class="section-title" style="margin-bottom: 10px;">HOÁ ĐƠN GIAO DỊCH</h2>
+                    <p class="report-subtitle">Theo dõi yêu cầu mua hàng, trạng thái xử lý và dòng tiền ghi nhận theo
+                        từng đơn.</p>
+                </div>
+
+                <div class="search-box report-search-box">
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                    <input type="text" id="adminTransactionSearchInput"
+                        placeholder="Tìm theo mã đơn, khách hàng hoặc trạng thái..."
+                        oninput="searchAdminTransactions(this.value)">
+                </div>
+            </div>
+
+            <div class="report-summary-grid">
+                <div class="stat-card blue">
+                    <h3>Tổng hoá đơn</h3>
+                    <p id="reportTransactionCount">0</p>
+                    <span>Số yêu cầu mua hàng đã ghi nhận</span>
+                </div>
+                <div class="stat-card green">
+                    <h3>Đã hoàn tất</h3>
+                    <p id="reportCompletedCount">0</p>
+                    <span>Đơn đã duyệt và chốt thanh toán</span>
+                </div>
+                <div class="stat-card orange">
+                    <h3>Chờ duyệt</h3>
+                    <p id="reportPendingCount">0</p>
+                    <span>Đơn đang chờ admin xác nhận</span>
+                </div>
+                <div class="stat-card red">
+                    <h3>Doanh thu ghi nhận</h3>
+                    <p id="reportTransactionRevenue">0$</p>
+                    <span>Tổng giá trị đơn đã hoàn tất</span>
+                </div>
+            </div>
+
+            <div class="admin-table-container" style="min-height: 420px;">
+                <table class="tactical-table">
+                    <thead>
+                        <tr>
+                            <th>Mã đơn</th>
+                            <th>Khách hàng</th>
+                            <th>Thời gian</th>
+                            <th>Sản phẩm</th>
+                            <th>Tổng tiền</th>
+                            <th>Trạng thái</th>
+                            <th>Thao tác</th>
+                        </tr>
+                    </thead>
+                    <tbody id="transactionTableBody">
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div id="view-admin-revenue" class="hide-menu">
+            <div class="report-toolbar">
+                <div>
+                    <h2 class="section-title" style="margin-bottom: 10px;">THỐNG KÊ DOANH THU</h2>
+                    <p class="report-subtitle">Tổng hợp doanh thu theo đơn hàng hoàn tất, nhóm sản phẩm và khách hàng
+                        nổi bật.</p>
+                </div>
+
+                <div class="report-toolbar-actions">
+                    <div class="report-filter-box">
+                        <label for="revenueRangeSelect">Mốc thời gian</label>
+                        <select id="revenueRangeSelect" onchange="changeRevenueRange(this.value)">
+                            <option value="7d">7 ngày gần nhất</option>
+                            <option value="30d">30 ngày gần nhất</option>
+                            <option value="90d" selected>90 ngày gần nhất</option>
+                            <option value="12m">12 tháng gần nhất</option>
+                            <option value="all">Toàn bộ dữ liệu</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <div class="report-range-note" id="revenueRangeNote">Đang xem: 90 ngày gần nhất</div>
+
+            <div class="report-summary-grid">
+                <div class="stat-card blue">
+                    <h3>Tổng doanh thu</h3>
+                    <p id="revenueTotalValue">0$</p>
+                    <span>Doanh thu từ các đơn đã hoàn tất</span>
+                </div>
+                <div class="stat-card green">
+                    <h3 id="revenueRangeSummaryLabel">Mốc đang xem</h3>
+                    <p id="revenueCurrentMonthValue">0$</p>
+                    <span id="revenueRangeSummaryText">Doanh thu trong giai đoạn đã chọn</span>
+                </div>
+                <div class="stat-card orange">
+                    <h3>Giá trị TB / đơn</h3>
+                    <p id="revenueAverageOrderValue">0$</p>
+                    <span>Mức chi tiêu bình quân mỗi giao dịch</span>
+                </div>
+                <div class="stat-card red">
+                    <h3>Tổng số lượng bán</h3>
+                    <p id="revenueUnitsSold">0</p>
+                    <span>Số sản phẩm đã đi qua hệ thống</span>
+                </div>
+            </div>
+
+            <div class="report-grid-panels revenue-chart-layout">
+                <div class="report-panel revenue-main-chart">
+                    <div class="report-panel-header">
+                        <h3 id="revenueTrendTitle">Biểu đồ doanh thu theo tháng</h3>
+                        <span id="revenueTrendCaption">So sánh nhanh theo mốc thời gian đã chọn</span>
+                    </div>
+                    <div id="revenueTrendChart" class="revenue-trend-chart"></div>
+                </div>
+
+                <div class="report-panel revenue-donut-panel">
+                    <div class="report-panel-header">
+                        <h3>Tỷ trọng doanh thu theo danh mục</h3>
+                        <span>Nhóm sản phẩm đóng góp cao nhất</span>
+                    </div>
+                    <div id="revenueCategoryChart" class="revenue-category-chart"></div>
+                </div>
+            </div>
+
+            <div class="report-panel">
+                <div class="report-panel-header">
+                    <h3>Biểu đồ khách hàng chi tiêu cao</h3>
+                    <span>Xếp hạng theo tổng giá trị đơn đã hoàn tất</span>
+                </div>
+                <div id="revenueCustomerChart" class="revenue-customer-chart"></div>
+            </div>
+        </div>
+
+    </main>
+
+    <script src="database.js"></script>
+    <script src="auth.js"></script>
+    <script src="ui-modals.js"></script>
+    <script src="app.js"></script>
+    <script src="products.js"></script>
+    <script src="cart.js"></script>
+    <script src="admin-features.js"></script>
+    <script src="admin-reports.js"></script>
+    <script src="admin-products.js"></script>
+    <script src="admin-customers.js"></script>
+    <script src="admin-staff.js"></script>
+    <script src="admin-suppliers.js"></script>
+    <script src="personal-info.js"></script>
+    <script src="order-history.js"></script>
+    <script>
+        window.onload = () => {
+            renderSidebar();
+            renderTopSelling();
+            if (typeof renderSaleProducts === 'function') renderSaleProducts();
+            if (typeof renderStorePromoStrip === 'function') renderStorePromoStrip();
+            if (typeof resetStoreSearch === 'function') resetStoreSearch(false);
+            renderProducts('all');
+            window.setTimeout(() => {
+                if (typeof resetStoreSearch === 'function') resetStoreSearch();
+            }, 250);
+            if (typeof hydrateCartFromStorage === 'function') hydrateCartFromStorage();
+            if (typeof renderStoreInsights === 'function') renderStoreInsights();
+            if (typeof renderOrderHistory === 'function') renderOrderHistory();
+            if (typeof updateInboxCounter === 'function') updateInboxCounter();
+
+            // Cập nhật lại list menu danh mục cho Modal Admin nếu nó bị tạo từ ui-modals
+            const adminCategorySelect = document.getElementById('formCategory');
+            if (adminCategorySelect) {
+                adminCategorySelect.innerHTML = `
+                    <optgroup label="Súng ngắn">
+                        <option value="sungngan-xoay">Súng ngắn ổ xoay</option>
+                        <option value="sungngan-banauto">Súng ngắn bán tự động</option>
+                        <option value="sungngan-auto">Súng ngắn tự động</option>
+                        <option value="sungngan-magnum">Súng ngắn Magnum</option>
+                    </optgroup>
+                    <optgroup label="Súng trường & Bắn tỉa">
+                        <option value="sungtruong-banauto">Súng trường bán tự động</option>
+                        <option value="sungtruong-auto">Súng trường tự động</option>
+                        <option value="sungbantia">Súng bắn tỉa</option>
+                    </optgroup>
+                    <optgroup label="Shotgun & Tiểu liên">
+                        <option value="shotgun">Súng Shotgun</option>
+                        <option value="smg-banauto">Tiểu liên bán tự động</option>
+                        <option value="smg-auto">Tiểu liên tự động</option>
+                    </optgroup>
+                    <optgroup label="Vũ khí hạng nặng">
+                        <option value="sungmay-nhe">Súng máy hạng nhẹ</option>
+                        <option value="sungmay-trung">Súng máy hạng trung</option>
+                        <option value="sungmay-nang">Súng máy hạng nặng</option>
+                        <option value="sungmay-danang">Súng máy đa chức năng</option>
+                        <option value="phunlua">Súng phun lửa</option>
+                        <option value="khonggiat">Súng không giật</option>
+                        <option value="phongtenlua">Hệ thống phóng tên lửa</option>
+                        <option value="phongluu">Súng phóng lựu</option>
+                        <option value="phao">Pháo</option>
+                    </optgroup>
+                    <optgroup label="Trang bị">
+                        <option value="danduoc">Đạn dược</option>
+                        <option value="phongve">Đồ tự vệ</option>
+                        <option value="phukien">Phụ kiện</option>
+                    </optgroup>
+                `;
+            }
+        }
+    </script>
+</body>
+
+</html>
