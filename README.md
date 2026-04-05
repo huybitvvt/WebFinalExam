@@ -20,8 +20,3 @@ Project bài tập lớn môn Cơ sở Lập trình Web, xây dựng bằng HTML
 2. Đăng nhập bằng tài khoản demo hoặc tạo tài khoản mới
 3. Dữ liệu được lưu trong `localStorage` của trình duyệt
 
-## Ghi chú
-
-- Project đã được bổ sung ảnh placeholder nội bộ cho sản phẩm nên không cần ảnh thật
-- Hero media trang chủ đã được đổi sang SVG nội bộ để tránh lỗi file `.mp4` bị thiếu
-- Nếu muốn reset dữ liệu demo, hãy xóa `localStorage` của trình duyệt
